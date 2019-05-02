@@ -1,7 +1,16 @@
-import json
+import json, logging, sys
 from troposphere import Tags, Template, Ref, Output
 
 from troposphere import ec2
+
+stdout_handler = logging.StreamHandler(sys.stdout)
+logging.basicConfig(
+    level=logging.DEBUG, 
+    format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
+    handlers=[stdout_handler]
+)
+logger = logging.getLogger('App')
+
 
 class App():
 
@@ -12,12 +21,15 @@ class App():
         self.template = Template()
         self.load_data(raw_data)
 
+        self.logger = logger
+
 
     def load_data(self, raw_data):
         try:
             self.data = json.loads(raw_data)
         except:
-            print ("Error loading data from file")
+            self.logger.error("Error loading data from file")
+            # print ("Error loading data from file")
 
 
     def generate_template(self):
@@ -57,6 +69,7 @@ class App():
 
 
     def load_resources(self, resources):
+        self.logger.info("setting resources")
         # add resources to template dynamically
         for label, data in resources.items():
             resource_type = data["Type"].split("::")[-1]
@@ -163,6 +176,7 @@ class App():
 
 
     def add_outputs(self, raw_outputs):
+        self.logger.info("setting outputs")
         for label, data in raw_outputs.items():
             data_ref = data["Value"]["Ref"]
             ref_output = self.resources[data_ref]
