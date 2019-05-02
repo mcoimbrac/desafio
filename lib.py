@@ -7,7 +7,7 @@ def get_param():
     return "Default"
 
 def list_files():
-    file_list = glob.glob("*.xjson")
+    file_list = glob.glob("*.json")
     if len(file_list) < 1:
         error_message = "No JSON file found."
         # raise Exception(error_message)
