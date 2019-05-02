@@ -11,7 +11,7 @@ __notes:__
 then:
 
 ```
-docker run -v $(pwd):/app mcoimbrac/troposherer
+docker run -v $(pwd):/app mcoimbrac/tropospherer
 ```
 
 ---
